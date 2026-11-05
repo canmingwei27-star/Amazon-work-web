@@ -32,9 +32,12 @@ jobs:
         run: >-
           docker run --rm --read-only -v workbench-smoke:/app/data --entrypoint node workbench:test
           -e "import('./settings.mjs').then(async({Settings})=>{const s=new Settings('/app/data');await s.save('fake-ci-key');if(await s.key()!=='fake-ci-key')process.exit(1)})"
+      - name: Verify Docker update and rollback
+        run: DOCKER_INTEGRATION=1 node --test test/updater-docker.test.mjs
       - uses: docker/build-push-action@v6
         with:
           context: .
+          labels: org.opencontainers.image.revision=${{ github.sha }}
           push: true
           platforms: linux/amd64,linux/arm64
           tags: |

@@ -1,0 +1,27 @@
+# Optional: install using this separate Compose project, or install-autoupdate.sh.
+services:
+  updater:
+    image: ghcr.io/canmingwei27-star/amazon-work-web:latest
+    container_name: amazon-work-web-updater
+    entrypoint: [node, updater/agent.mjs]
+    user: '0:0'
+    restart: unless-stopped
+    read_only: true
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    healthcheck:
+      disable: true
+    labels:
+      io.amazon-work.updater: 'true'
+    environment:
+      TARGET_CONTAINER: amazon-work-web-dashboard-1
+      UPDATE_STATE_VOLUME: amazon-work-web_update-state
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - state:/updates
+      - backups:/backups
+volumes:
+  state:
+    name: amazon-work-web_update-state
+  backups:
+    name: amazon-work-web_update-backups

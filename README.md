@@ -16,6 +16,30 @@ curl -fsSL https://raw.githubusercontent.com/canmingwei27-star/Amazon-work-web/m
 
 也可以下载仓库后在飞牛 Docker 项目管理中选择 `compose.yaml`：先复制 `.env.example` 为 `.env` 并填写网站登录账号。MCP 密钥留空，通过网页保存即可。
 
+## v1.2.0 · 网页系统更新
+
+管理员导航新增「系统更新」：当前版本、检查更新、立即更新/重试、自动安装开关、执行步骤与最近25条记录。推送 main 后 CI 先测试，再发布 amd64/arm64 镜像；助手每5分钟检查已发布镜像，默认自动安装。需等 CI 成功发布后才可检测到更新。
+
+### 现有飞牛部署，首次连接一次
+
+目标须为 `amazon-work-web-dashboard-1`，Compose 项目 amazon-work-web、服务 dashboard，使用本仓库 GHCR latest 镜像和持久化 /app/data。在有 Docker 权限的飞牛 SSH 终端执行：
+
+```sh
+curl -fsSL https://raw.githubusercontent.com/canmingwei27-star/Amazon-work-web/main/install-autoupdate.sh | sh
+```
+
+脚本新增独立更新助手，首次自动升级会为网站挂载状态卷；保留现有端口、账号、密钥和数据。之后刷新网页、重新登录管理员即可管理更新。查看过程：`docker logs --tail=50 amazon-work-web-updater`。可选：将 `updater.compose.yaml` 作为独立 Compose 项目导入，二选一。
+
+助手访问 Docker socket，拥有主机 Docker 管理能力；网站不挂载 socket。助手不发布端口，程序校验容器名、镜像来源和 Compose 身份，仅更新此网站。助手自身不随网站自动替换，后续升级助手需重建其容器并保留更新卷。
+
+### 更新与恢复
+
+- 下载时网站继续运行。切换时停止旧网站，备份 /app/data，重建并验证健康，成功后才删除旧容器。保留原端口、环境变量、数据卷、安全参数及普通网络；不删除原数据卷。
+- 120秒内健康检查未通过，恢复旧版容器。恢复为代码/容器恢复，**不会自动倒退数据文件**；更新前 tar 备份供人工恢复。备份卷 `amazon-work-web_update-backups` 仅助手访问，保留最近5份，每份上限1GB；备份失败则中止更新并重启旧版。
+- 数据格式标签 `io.amazon-work.data-schema` 改变时拒绝自动安装，需人工迁移。当前格式1；历史无标签按1处理。失败镜像暂停自动重试，可网页手动重试或等待新镜像。中断通过事务日志恢复，已开始的手动请求不重复执行。
+- 静态容器 IP、共享其他容器网络、非持久化数据目录需手动更新。重建保留 Compose 标签，但不修改飞牛原 YAML；如果后来强制重建丢失 /updates 挂载，助手会重新连接。不要同时运行其他更新器或手动重建同一容器。
+- 网页关闭自动安装后仍定期检查。紧急暂停助手：`docker stop amazon-work-web-updater`，网站继续运行；恢复：`docker start amazon-work-web-updater`。
+
 ## v1.1.0 更新
 
 - 新增玻璃卡片登录 UI、管理员新增/停用账号、HttpOnly 会话与退出登录。旧部署的环境变量账号只在首次迁移时导入；之后账号保存在数据卷的 users.json，修改环境变量不会重置已创建账号。没有配置环境变量时，首次进入页面需初始化管理员。会话12小时有效，容器重启后需重新登录。
