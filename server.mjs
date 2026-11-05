@@ -131,7 +131,7 @@ async function handle(req,res){
    return send(res,200,output);
   }catch(e){return send(res,502,{error:e.message});}finally{await client.close();running=false;}
  }
- const files={'/motion.js':'motion.js','/table-scroll.js':'table-scroll.js','/updates.js':'updates.js','/':'index.html','/app.js':'app.js','/api.js':'api.js','/style.css':'style.css','/ads.js':'ads.js','/workbench.js':'workbench.js','/settings.js':'settings.js','/advanced.js':'advanced.js','/workflows.js':'workflows.js','/accounts.js':'accounts.js','/sales.js':'sales.js','/official-ads.js':'official-ads.js'};
+ const files={'/motion.js':'motion.js','/table-scroll.js':'table-scroll.js','/updates.js':'updates.js','/date-range.js':'date-range.js','/':'index.html','/app.js':'app.js','/api.js':'api.js','/style.css':'style.css','/ads.js':'ads.js','/workbench.js':'workbench.js','/settings.js':'settings.js','/advanced.js':'advanced.js','/workflows.js':'workflows.js','/accounts.js':'accounts.js','/sales.js':'sales.js','/official-ads.js':'official-ads.js'};
  if(!files[url.pathname])return send(res,404,{error:'Not found'});
  try{const file=files[url.pathname];res.writeHead(200,{'Content-Type':file.endsWith('.js')?'text/javascript; charset=utf-8':file.endsWith('.css')?'text/css; charset=utf-8':'text/html; charset=utf-8','Cache-Control':'no-cache'});res.end(await readFile(new URL('./public/'+file,import.meta.url)));}catch{send(res,500,{error:'页面加载失败'});}
 }

@@ -6,7 +6,7 @@ COPY --chown=node:node updater ./updater
 RUN mkdir /app/data /updates /backups
 RUN chown node:root /updates && chmod 0770 /updates && chmod 0700 /backups
 RUN chown node:node /app/data
-LABEL org.opencontainers.image.version="1.2.7" io.amazon-work.data-schema="1" io.amazon-work.release-notes="更新记录增加版本号和版本特性说明"
+LABEL org.opencontainers.image.version="1.2.8" io.amazon-work.data-schema="1" io.amazon-work.release-notes="全局查询时间升级为赛狐风格双月日历和快捷日期范围"
 USER node
 LABEL org.opencontainers.image.source="https://github.com/canmingwei27-star/Amazon-work-web"
 ENV NODE_ENV=production PORT=3000
