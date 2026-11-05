@@ -37,3 +37,7 @@ html{scroll-behavior:smooth}button{transition:background-color .16s ease,box-sha
 /* Keep page scrolling on the compositor and make viewport edges feel deliberate. */
 html{scroll-behavior:smooth;overscroll-behavior-y:none;scrollbar-gutter:stable}body{overscroll-behavior-y:none;-webkit-overflow-scrolling:touch}.tablewrap{overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+
+
+/* Keep interactive transforms on the compositor and release the hint after each transition. */
+@media(hover:hover){nav button:hover:not(:disabled){transform:translate3d(2px,0,0)}}
