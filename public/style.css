@@ -41,3 +41,7 @@ html{scroll-behavior:smooth;overscroll-behavior-y:none;scrollbar-gutter:stable}b
 
 /* Keep interactive transforms on the compositor and release the hint after each transition. */
 @media(hover:hover){nav button:hover:not(:disabled){transform:translate3d(2px,0,0)}}
+
+
+/* Keep the document itself as the vertical scroll container. */
+html,body{min-height:100%;overflow-y:auto}main{min-height:100vh}
