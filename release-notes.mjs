@@ -1,4 +1,4 @@
-export const APP_VERSION='1.2.10';
+export const APP_VERSION='1.2.11';
 
 export const RELEASES=Object.freeze({
  '1.2.0':'新增网页系统更新、自动检查、更新前备份和失败回滚',
@@ -11,7 +11,8 @@ export const RELEASES=Object.freeze({
  '1.2.7':'更新记录增加版本号和版本特性说明',
  '1.2.8':'全局查询时间升级为赛狐风格双月日历和快捷日期范围',
  '1.2.9':'优化更新记录、版本特性展示和固定方向进度条；统一宽表底部滑条',
- '1.2.10':'新增手机端响应式布局，优化导航、表单、卡片、弹窗与宽表操作'
+ '1.2.10':'新增手机端响应式布局，优化导航、表单、卡片、弹窗与宽表操作',
+ '1.2.11':'修复当前版本与候选版本相同时误报发现新版本'
 });
 
 export function enrichUpdateStatus(status){
