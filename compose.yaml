@@ -1,0 +1,15 @@
+services:
+  dashboard:
+    image: ghcr.io/canmingwei27-star/amazon-work-web:latest
+    build: .
+    ports:
+      - "3080:3000"
+    env_file: .env
+    volumes:
+      - workspace-data:/app/data
+    restart: unless-stopped
+    read_only: true
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+volumes:
+  workspace-data:
