@@ -1,4 +1,4 @@
-export const APP_VERSION='1.2.9';
+export const APP_VERSION='1.2.10';
 
 export const RELEASES=Object.freeze({
  '1.2.0':'新增网页系统更新、自动检查、更新前备份和失败回滚',
@@ -10,7 +10,8 @@ export const RELEASES=Object.freeze({
  '1.2.6':'修复店铺归属，统一币种入口并在筛选变化后自动刷新',
  '1.2.7':'更新记录增加版本号和版本特性说明',
  '1.2.8':'全局查询时间升级为赛狐风格双月日历和快捷日期范围',
- '1.2.9':'优化滚动性能、刷新率同步动画与顶底边界反馈'
+ '1.2.9':'优化滚动性能、刷新率同步动画与顶底边界反馈',
+ '1.2.10':'修复鼠标滚轮纵向滚动失效，并保持底部横向滑块可用'
 });
 
 export function enrichUpdateStatus(status){
