@@ -45,3 +45,9 @@ html{scroll-behavior:smooth;overscroll-behavior-y:none;scrollbar-gutter:stable}b
 
 /* Keep the document itself as the vertical scroll container. */
 html,body{min-height:100%;overflow-y:auto}main{min-height:100vh}
+
+
+/* The floating dock is the single visible horizontal scrollbar for wide tables. */
+main .tablewrap{scrollbar-width:none}main .tablewrap::-webkit-scrollbar{height:0;width:0}
+/* Keep the document itself as the vertical scroll container. */
+html,body{min-height:100%;overflow-y:auto}main{min-height:100vh}
