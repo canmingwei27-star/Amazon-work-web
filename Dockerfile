@@ -6,7 +6,7 @@ COPY --chown=node:node updater ./updater
 RUN mkdir /app/data /updates /backups
 RUN chown node:root /updates && chmod 0770 /updates && chmod 0700 /backups
 RUN chown node:node /app/data
-LABEL org.opencontainers.image.version="1.2.9" io.amazon-work.data-schema="1" io.amazon-work.release-notes="优化滚动性能、刷新率同步动画与顶底边界反馈"
+LABEL org.opencontainers.image.version="1.2.10" io.amazon-work.data-schema="1" io.amazon-work.release-notes="修复鼠标滚轮纵向滚动失效，并保持底部横向滑块可用"
 USER node
 LABEL org.opencontainers.image.source="https://github.com/canmingwei27-star/Amazon-work-web"
 ENV NODE_ENV=production PORT=3000
