@@ -25,6 +25,16 @@ jobs:
       - uses: docker/build-push-action@v6
         with:
           context: .
+          load: true
+          platforms: linux/amd64
+          tags: workbench:test
+      - name: Verify non-root data volume writes
+        run: >-
+          docker run --rm --read-only -v workbench-smoke:/app/data --entrypoint node workbench:test
+          -e "import('./settings.mjs').then(async({Settings})=>{const s=new Settings('/app/data');await s.save('fake-ci-key');if(await s.key()!=='fake-ci-key')process.exit(1)})"
+      - uses: docker/build-push-action@v6
+        with:
+          context: .
           push: true
           platforms: linux/amd64,linux/arm64
           tags: |
