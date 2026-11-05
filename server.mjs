@@ -41,7 +41,7 @@ async function handle(req,res){
  if(!user){if(url.pathname==='/'){res.writeHead(302,{Location:'/login','Cache-Control':'no-store'});return res.end();}return send(res,401,{error:'请先登录',loginRequired:true});}
  if(url.pathname==='/api/updates'){
   if(user.role!=='admin')return send(res,403,{error:'仅管理员可管理系统更新'});
-  try{if(req.method==='GET')return send(res,200,{...await updates.status(),websiteVersion:'1.2.3'});if(req.method!=='POST')return send(res,405,{error:'不支持的方法'});const input=await body(req);if(input.action==='install'&&running)return send(res,409,{error:'数据查询正在执行，请完成后更新'});return send(res,202,await updates.request(input,user));}catch(e){return send(res,400,{error:e.message});}
+  try{if(req.method==='GET')return send(res,200,{...await updates.status(),websiteVersion:'1.2.4'});if(req.method!=='POST')return send(res,405,{error:'不支持的方法'});const input=await body(req);if(input.action==='install'&&running)return send(res,409,{error:'数据查询正在执行，请完成后更新'});return send(res,202,await updates.request(input,user));}catch(e){return send(res,400,{error:e.message});}
  }
  if(url.pathname==='/api/auth/logout'&&req.method==='POST'){accounts.logout(req);res.setHeader('Set-Cookie',accounts.cookie('',true));return send(res,200,{ok:true});}
  if(url.pathname==='/api/accounts'){
@@ -107,7 +107,7 @@ async function handle(req,res){
   }catch{return send(res,400,{error:'保存失败，请检查数据格式、磁盘权限与剩余空间'});}
  }
  if(req.method!=='GET')return send(res,405,{error:'仅支持读取'});
- if(url.pathname==='/api/status'){try{return send(res,200,{...await settings.status(),version:'1.2.3',authentication:true,user,csrfToken});}catch{return send(res,500,{error:'配置读取失败'});}}
+ if(url.pathname==='/api/status'){try{return send(res,200,{...await settings.status(),version:'1.2.4',authentication:true,user,csrfToken});}catch{return send(res,500,{error:'配置读取失败'});}}
  if(url.pathname==='/api/ads'){
   if(!await settings.key())return send(res,503,{error:'请先到接口设置保存密钥'});
   const shop=url.searchParams.get('shop'),date=url.searchParams.get('date');
@@ -130,7 +130,7 @@ async function handle(req,res){
    return send(res,200,output);
   }catch(e){return send(res,502,{error:e.message});}finally{await client.close();running=false;}
  }
- const files={'/table-scroll.js':'table-scroll.js','/updates.js':'updates.js','/':'index.html','/app.js':'app.js','/api.js':'api.js','/style.css':'style.css','/ads.js':'ads.js','/workbench.js':'workbench.js','/settings.js':'settings.js','/advanced.js':'advanced.js','/workflows.js':'workflows.js','/accounts.js':'accounts.js','/sales.js':'sales.js','/official-ads.js':'official-ads.js'};
+ const files={'/motion.js':'motion.js','/table-scroll.js':'table-scroll.js','/updates.js':'updates.js','/':'index.html','/app.js':'app.js','/api.js':'api.js','/style.css':'style.css','/ads.js':'ads.js','/workbench.js':'workbench.js','/settings.js':'settings.js','/advanced.js':'advanced.js','/workflows.js':'workflows.js','/accounts.js':'accounts.js','/sales.js':'sales.js','/official-ads.js':'official-ads.js'};
  if(!files[url.pathname])return send(res,404,{error:'Not found'});
  try{const file=files[url.pathname];res.writeHead(200,{'Content-Type':file.endsWith('.js')?'text/javascript; charset=utf-8':file.endsWith('.css')?'text/css; charset=utf-8':'text/html; charset=utf-8','Cache-Control':'no-cache'});res.end(await readFile(new URL('./public/'+file,import.meta.url)));}catch{send(res,500,{error:'页面加载失败'});}
 }
