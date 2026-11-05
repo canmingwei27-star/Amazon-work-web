@@ -37,3 +37,7 @@ html{scroll-behavior:smooth}button{transition:background-color .16s ease,box-sha
 /* Use the floating dock as the only visible horizontal scrollbar for wide tables. */
 main .tablewrap{scrollbar-width:none}main .tablewrap::-webkit-scrollbar{height:0;width:0}
 #update-progress{display:block;width:100%;height:10px;margin:16px 0;accent-color:#4368db;direction:ltr}
+
+
+/* Sales exceptions keeps a stable wide layout so the shared bottom dock is available. */
+#sales-panel .tablewrap table{min-width:1780px}
