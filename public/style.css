@@ -14,3 +14,14 @@ nav button{margin:2px 0;padding:9px 12px}#settings-form label:first-child{min-wi
 #table-header-dock{position:fixed;z-index:45;overflow:hidden;background:white;pointer-events:none;box-shadow:0 3px 8px #18233a16}#table-header-dock table{margin:0}#table-header-dock th{background:white}@media print{#table-header-dock{display:none!important}}
 
 #table-scroll-dock{position:fixed;bottom:0;z-index:50;height:25px;overflow-x:scroll;overflow-y:hidden;background:#fff;border:1px solid #dbe1eb;border-radius:6px 6px 0 0;box-shadow:0 -3px 12px #18233a18;scrollbar-color:#8493a8 #edf1f6;scrollbar-width:auto}#table-scroll-dock>div{height:1px}#table-scroll-dock:focus-visible{outline:2px solid #4368db;outline-offset:-2px}main{padding-bottom:64px}@media print{#table-scroll-dock{display:none!important}}
+
+#table-header-dock{box-shadow:0 2px 4px #18233a0a;border-bottom:1px solid #edf0f5}#table-header-dock .table-header-viewport{overflow:hidden}#table-header-dock th{overflow:hidden;text-overflow:ellipsis}
+
+/* Rounded glass workspace: opaque fallback remains readable without blur support. */
+body{background:#edf2fa;background-image:radial-gradient(ellipse at 18% 5%,#dce9ff 0,transparent 48%),radial-gradient(ellipse at 92% 55%,#d9f0ed 0,transparent 48%);background-attachment:fixed}
+aside{background:linear-gradient(160deg,#14243bee,#102039f5);border-right:1px solid #ffffff20;backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px)}nav button{border-radius:13px}nav button.active{background:#edf6fff0;box-shadow:0 3px 12px #0000000c}
+section,.card{border-radius:22px;background:#ffffffed;border:1px solid #ffffffd9;box-shadow:0 8px 28px #294b7510}input,select,button{border-radius:12px}input,select{background:#ffffffd9}button{transition:background .15s,box-shadow .15s}button:hover:not(:disabled){background:#edf3ff;box-shadow:0 3px 10px #294b7510}button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid #537bd7;outline-offset:2px}
+.notice,#message{border-radius:16px}.task-card{border-radius:16px;background:#ffffffed}dialog{border-radius:22px;background:#fffffff5;box-shadow:0 18px 60px #18324f30}dialog::backdrop{background:#152b4c66;backdrop-filter:blur(5px)}.product-thumb{border-radius:13px}.tablewrap{border-radius:12px}th{color:#63738c}td,th{border-bottom-color:#dfe7f080}
+#table-header-dock{background:#ffffffed;border-radius:0 0 15px 15px;border:1px solid #ffffffc9;border-top:0}#table-header-dock th{background:transparent}#table-scroll-dock{border-radius:12px 12px 0 0;background:#fffffff2}
+@supports ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){section,.card{background:#ffffffb8;backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)}#table-header-dock{background:#fffffff0;backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)}}
+@media print{body{background:white}section,.card{background:white;box-shadow:none;backdrop-filter:none}}

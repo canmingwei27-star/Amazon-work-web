@@ -6,7 +6,7 @@ COPY --chown=node:node updater ./updater
 RUN mkdir /app/data /updates /backups
 RUN chown node:root /updates && chmod 0770 /updates && chmod 0700 /backups
 RUN chown node:node /app/data
-LABEL org.opencontainers.image.version="1.2.2" io.amazon-work.data-schema="1"
+LABEL org.opencontainers.image.version="1.2.3" io.amazon-work.data-schema="1"
 USER node
 LABEL org.opencontainers.image.source="https://github.com/canmingwei27-star/Amazon-work-web"
 ENV NODE_ENV=production PORT=3000
