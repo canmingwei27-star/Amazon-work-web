@@ -1,6 +1,6 @@
 # 开发与 AI 迭代手册
 
-维护基线：2026-11-05，网站 v1.2.6。本文是定位索引，不代替实时源码、远端分支和接口契约。
+维护基线：2026-11-05，网站 v1.2.7。本文是定位索引，不代替实时源码、远端分支和接口契约。
 
 ## 快速接手
 
@@ -121,7 +121,7 @@ node --test test/updater.test.mjs
 
 ## 发布与系统更新
 
-运行代码发布时核对版本位置：package.json、Dockerfile 镜像版本标签、server.mjs 状态接口、public/index.html 页头。当前版本号尚未集中生成，注意遗漏。
+运行代码发布时核对版本位置：package.json、Dockerfile 镜像版本标签、release-notes.mjs 的 APP_VERSION 与 RELEASES、public/index.html 页头。服务端状态接口从 release-notes.mjs 读取版本。每个运行版本必须登记一条面向运营人员的简短特性说明，并写入 Docker 的 io.amazon-work.release-notes 标签。
 
 main 推送触发 .github/workflows/docker.yml：全量 Node 测试 → amd64 测试镜像 → 数据卷权限验证 → 真实容器更新/失败恢复验证 → 发布 GHCR latest 与提交 SHA 标签，支持 amd64/arm64。不要仅凭推送成功声称镜像可用。
 
@@ -176,3 +176,4 @@ main 推送触发 .github/workflows/docker.yml：全量 Node 测试 → amd64 �
 - v1.2.5：业务表格金额、小数指标及百分比固定两位；计数和标识保留原类别。格式化只作用于展示，原始数据、计算、备份及原始详情保持精度。
 
 - v1.2.6：总览统一金额币种入口，修改筛选自动刷新并合并进行中的请求，丢弃旧条件结果；利润明细移除币种列，金额用货币符号和两位小数。利润归属兼容实际返回的 shopInfos[].shopId/shopName（外层 shopId 可能为空）。
+- v1.2.7：系统更新记录增加版本号和版本特性列；服务端为旧助手的最近一次完成记录补充当前版本，并从版本清单补充特性。新版助手会把镜像标签中的版本及特性写入后续事件。
