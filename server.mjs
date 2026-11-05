@@ -41,7 +41,7 @@ async function handle(req,res){
  if(!user){if(url.pathname==='/'){res.writeHead(302,{Location:'/login','Cache-Control':'no-store'});return res.end();}return send(res,401,{error:'请先登录',loginRequired:true});}
  if(url.pathname==='/api/updates'){
   if(user.role!=='admin')return send(res,403,{error:'仅管理员可管理系统更新'});
-  try{if(req.method==='GET')return send(res,200,{...await updates.status(),websiteVersion:'1.2.5'});if(req.method!=='POST')return send(res,405,{error:'不支持的方法'});const input=await body(req);if(input.action==='install'&&running)return send(res,409,{error:'数据查询正在执行，请完成后更新'});return send(res,202,await updates.request(input,user));}catch(e){return send(res,400,{error:e.message});}
+  try{if(req.method==='GET')return send(res,200,{...await updates.status(),websiteVersion:'1.2.6'});if(req.method!=='POST')return send(res,405,{error:'不支持的方法'});const input=await body(req);if(input.action==='install'&&running)return send(res,409,{error:'数据查询正在执行，请完成后更新'});return send(res,202,await updates.request(input,user));}catch(e){return send(res,400,{error:e.message});}
  }
  if(url.pathname==='/api/auth/logout'&&req.method==='POST'){accounts.logout(req);res.setHeader('Set-Cookie',accounts.cookie('',true));return send(res,200,{ok:true});}
  if(url.pathname==='/api/accounts'){
@@ -107,7 +107,7 @@ async function handle(req,res){
   }catch{return send(res,400,{error:'保存失败，请检查数据格式、磁盘权限与剩余空间'});}
  }
  if(req.method!=='GET')return send(res,405,{error:'仅支持读取'});
- if(url.pathname==='/api/status'){try{return send(res,200,{...await settings.status(),version:'1.2.5',authentication:true,user,csrfToken});}catch{return send(res,500,{error:'配置读取失败'});}}
+ if(url.pathname==='/api/status'){try{return send(res,200,{...await settings.status(),version:'1.2.6',authentication:true,user,csrfToken});}catch{return send(res,500,{error:'配置读取失败'});}}
  if(url.pathname==='/api/ads'){
   if(!await settings.key())return send(res,503,{error:'请先到接口设置保存密钥'});
   const shop=url.searchParams.get('shop'),date=url.searchParams.get('date');
@@ -126,7 +126,7 @@ async function handle(req,res){
    await client.connect();const requestedCurrency=url.searchParams.get('currency')||'',caliber=url.searchParams.get('caliber')||'settlement',shop=url.searchParams.get('shop')||'';if(!['','USD','CAD','CNY','EUR','GBP','MXN','BRL','JPY'].includes(requestedCurrency)||!['settlement','shipment'].includes(caliber))return send(res,400,{error:'无效的币种或利润口径'});const output={fetchedAt:new Date().toISOString(),period:{start,end},query:{currency:requestedCurrency,caliber,shop,source:'利润报表（不等同于经营看板）',timezone:'上游未声明'},sources:{}};
    try{output.sources.shops={status:'success',...await readPages(client,'get_shop_page_list',{})};}catch{output.sources.shops={status:'error',error:'店铺查询失败，请检查连接和权限'};}
    if(shop&&!output.sources.shops?.rows?.some(s=>String(s.id)===shop))return send(res,400,{error:'店铺不在当前授权列表'});
-   try{output.sources.profit={status:'success',...await readPages(client,'get_profit_report_by_shop',{date_type:2,start_date:start.replaceAll('-',''),end_date:end.replaceAll('-',''),currency:requestedCurrency,profit_caliber_type:caliber,...(shop?{shop_ids:[Number(shop)]}:{}),field_list:['shopId','currency','salesNum','productSales','grossProfit','cpcCost','refundNum']})};}catch(e){output.sources.profit={status:'error',error:e.message};}
+   try{output.sources.profit={status:'success',...await readPages(client,'get_profit_report_by_shop',{date_type:2,start_date:start.replaceAll('-',''),end_date:end.replaceAll('-',''),currency:requestedCurrency,profit_caliber_type:caliber,...(shop?{shop_ids:[Number(shop)]}:{}),field_list:['shopId','shopInfos','currency','salesNum','productSales','grossProfit','cpcCost','refundNum']})};}catch(e){output.sources.profit={status:'error',error:e.message};}
    return send(res,200,output);
   }catch(e){return send(res,502,{error:e.message});}finally{await client.close();running=false;}
  }
