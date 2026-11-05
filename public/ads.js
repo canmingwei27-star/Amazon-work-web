@@ -1,7 +1,7 @@
 let adsSnapshot=null,adsBusy=false,adsStale=false;
 const adEl=s=>document.querySelector(s);
 const adEscape=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const adFmt=n=>n==null?'—':Number(n).toLocaleString('zh-CN',{maximumFractionDigits:2});
+const adFmt=(n,digits=2)=>n==null||String(n).trim()===''||!Number.isFinite(Number(n))?'—':Number(n).toLocaleString('zh-CN',{minimumFractionDigits:digits,maximumFractionDigits:digits});
 function renderAds(){
  const rows=adsSnapshot?.rows??[],high=rows.filter(r=>r.status==='high'),zero=rows.filter(r=>r.status==='no-sales'),unknown=rows.filter(r=>r.status==='unknown'),empty=rows.filter(r=>r.status==='no-data');
  adEl('#ad-summary').textContent=adsSnapshot?`ACOS > 25%：${high.length} 个；有花费无销售：${zero.length} 个；无小时记录：${empty.length} 个；待核对：${unknown.length} 个；未查询：${adsSnapshot.unqueried} 个${adsStale?' · 上次结果已过期':''}`:'尚未读取广告报告';
