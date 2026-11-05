@@ -1,6 +1,6 @@
 FROM node:24-alpine
 WORKDIR /app
-COPY --chown=node:node package.json server.mjs mcp.mjs ads.mjs workspace.mjs settings.mjs sync.mjs ./
+COPY --chown=node:node package.json server.mjs mcp.mjs ads.mjs workspace.mjs settings.mjs sync.mjs auth.mjs sales-anomalies.mjs campaign-report.mjs ./
 COPY --chown=node:node public ./public
 RUN mkdir /app/data
 RUN chown node:node /app/data

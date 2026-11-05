@@ -1,6 +1,6 @@
 import {mkdir,readFile,writeFile,rename} from 'node:fs/promises';
 import {join} from 'node:path';
-export const collections=['products','keywords','competitors','listings','inventory','tasks','searchterms','adjustments','shipments','assets','feedback','reviews'];
+export const collections=['products','keywords','competitors','listings','inventory','tasks','searchterms','adjustments','shipments','assets','feedback','reviews','salesSnapshots'];
 export class Workspace{
  constructor(directory){this.directory=directory;this.queue=Promise.resolve();}
  async read(){try{const data=JSON.parse(await readFile(join(this.directory,'workspace.json'),'utf8'));for(const key of collections)data[key]??=[];return data;}catch(e){if(e.code!=='ENOENT')throw e;return {version:1,...Object.fromEntries(collections.map(k=>[k,[]]))};}}
