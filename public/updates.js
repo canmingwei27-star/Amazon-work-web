@@ -4,13 +4,13 @@ document.addEventListener('DOMContentLoaded',async()=>{
  const phases={idle:'检查完成',starting:'正在连接',downloading:'正在下载',backing_up:'正在备份',restarting:'正在安装',health_check:'正在验证',updated:'更新成功',rolling_back:'正在恢复',rolled_back:'已恢复旧版',error:'需要处理',failed:'需要人工处理',blocked:'已暂停重试',recovering:'正在恢复',not_installed:'未安装助手',cleanup_warning:'清理提醒'};
  const busy=s=>['starting','downloading','backing_up','restarting','health_check','rolling_back','recovering'].includes(s.phase);
  async function request(options){const response=await apiFetch('/api/updates',options);const data=await response.json();if(!response.ok)throw new Error(data.error||'更新服务暂不可用');return data;}
- const date=v=>v?new Date(v).toLocaleString():'—',version=v=>v&&v!=='旧版本'?'v'+String(v).replace(/^v/,''):'—';
+ const date=v=>v?new Date(v).toLocaleString():'—',version=v=>v&&v!=='旧版本'?'v'+String(v).replace(/^v/,''):'—',sameVersion=(a,b)=>String(a??'').replace(/^v/,'')===String(b??'').replace(/^v/,'');
  async function refresh(){
   if(!active)return;
   try{
    const s=await request();if(reconnecting){reconnecting=false;location.reload();return;}pending=false;
-   $('update-version').textContent='v'+s.websiteVersion;$('update-phase').textContent=!s.configured?'助手未连接':s.available&&s.phase==='idle'?'发现新版本':phases[s.phase]||s.phase;
-   const candidate=s.available&&s.candidateVersion?`发现新版本 v${String(s.candidateVersion).replace(/^v/,'')}${s.candidateFeature?' · '+s.candidateFeature:''}`:'';
+   const currentVersion=s.websiteVersion||s.currentVersion||'';const candidateVersion=s.candidateVersion||'';const hasNewVersion=s.available===true&&candidateVersion&&!sameVersion(candidateVersion,currentVersion);$('update-version').textContent='v'+currentVersion;$('update-phase').textContent=!s.configured?'助手未连接':hasNewVersion&&s.phase==='idle'?'发现新版本':phases[s.phase]||s.phase;
+   const candidate=hasNewVersion?`发现新版本 v${String(candidateVersion).replace(/^v/,'')}${s.candidateFeature?' · '+s.candidateFeature:''}`:'';
    $('update-message').textContent=candidate||s.message||'等待检查';const running=busy(s);$('update-progress').hidden=!running;$('update-progress').value=progress[s.phase]??0;$('update-progress').textContent=`${progress[s.phase]??0}%`;$('update-setup').hidden=s.configured;
    $('update-check').disabled=$('update-install').disabled=$('update-auto').disabled=!s.configured||busy(s);$('update-auto').checked=s.autoEnabled===true;
    $('update-meta').textContent='当前镜像版本：'+(s.currentVersion||'—')+' · 当前特性：'+(s.currentRelease||'—')+' · 提交：'+(s.currentRevision?.slice(0,7)||'—')+' · 上次检查：'+date(s.lastCheckAt)+' · 上次更新：'+date(s.lastUpdateAt)+(s.backupFile?' · 最近备份：'+s.backupFile:'');
