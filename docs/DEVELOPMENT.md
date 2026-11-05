@@ -1,6 +1,6 @@
 # 开发与 AI 迭代手册
 
-维护基线：2026-11-05，网站 v1.2.1。本文是定位索引，不代替实时源码、远端分支和接口契约。
+维护基线：2026-11-05，网站 v1.2.2。本文是定位索引，不代替实时源码、远端分支和接口契约。
 
 ## 快速接手
 
@@ -24,7 +24,7 @@ node --env-file-if-exists=.env server.mjs
 | 请求类型 | 优先读取/修改 | 关联验证 |
 |---|---|---|
 | 颜色、间距、表格样式 | public/style.css | 受影响页面视觉检查 |
-| 长表格横向滚动条 | public/table-scroll.js、style.css | 多行宽表、左右同步、切换模块、窗口缩放 |
+| 长表格横向滚动条、工作区表头吸顶 | public/table-scroll.js、style.css | 多行宽表、左右同步、切换模块、窗口缩放 |
 | 页面入口、静态资源 | public/index.html、server.mjs 静态白名单 | test/ui-contract.test.mjs、server.test.mjs |
 | 总览、店铺、利润 | public/app.js、server.mjs 的 /api/dashboard、mcp.mjs | mcp.test.mjs、server.test.mjs |
 | 商品同步、图片、库存字段 | sync.mjs、public/workbench.js、advanced.js | sync.test.mjs |
@@ -166,4 +166,4 @@ main 推送触发 .github/workflows/docker.yml：全量 Node 测试 → amd64 �
 - v1.1.0：登录/账号/退出、产品缩略图、负毛利周期提醒、CSRF及报表来源修正。
 - v1.2.0：网页系统更新与独立 Docker 更新助手。
 - v1.2.1：长表格底部悬浮横向滚动条，随当前可见表格同步。
-- 本次仅补开发接手文档，运行版本不变。以后只在这里补与本次相关的一条简要记录。
+- v1.2.2：工作区表格表头吸顶固定，随横向滚动对齐，离开表格自动隐藏。

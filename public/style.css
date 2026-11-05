@@ -11,4 +11,6 @@ nav button{margin:2px 0;padding:9px 12px}#settings-form label:first-child{min-wi
 
 .product-thumb{width:64px;height:64px;object-fit:contain;border:1px solid #e4eaf1;border-radius:8px;background:#fff;cursor:zoom-in;display:block}.image-placeholder{color:#94a0b3;font-size:12px;min-width:78px}
 
+#table-header-dock{position:fixed;z-index:45;overflow:hidden;background:white;pointer-events:none;box-shadow:0 3px 8px #18233a16}#table-header-dock table{margin:0}#table-header-dock th{background:white}@media print{#table-header-dock{display:none!important}}
+
 #table-scroll-dock{position:fixed;bottom:0;z-index:50;height:25px;overflow-x:scroll;overflow-y:hidden;background:#fff;border:1px solid #dbe1eb;border-radius:6px 6px 0 0;box-shadow:0 -3px 12px #18233a18;scrollbar-color:#8493a8 #edf1f6;scrollbar-width:auto}#table-scroll-dock>div{height:1px}#table-scroll-dock:focus-visible{outline:2px solid #4368db;outline-offset:-2px}main{padding-bottom:64px}@media print{#table-scroll-dock{display:none!important}}
