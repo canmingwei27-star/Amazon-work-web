@@ -6,7 +6,7 @@ COPY --chown=node:node updater ./updater
 RUN mkdir /app/data /updates /backups
 RUN chown node:root /updates && chmod 0770 /updates && chmod 0700 /backups
 RUN chown node:node /app/data
-LABEL org.opencontainers.image.version="1.2.10" io.amazon-work.data-schema="1" io.amazon-work.release-notes="新增手机端响应式布局，优化导航、表单、卡片、弹窗与宽表操作"
+LABEL org.opencontainers.image.version="1.2.11" io.amazon-work.data-schema="1" io.amazon-work.release-notes="销售异常增加广告指标及负15美元筛选"
 USER node
 LABEL org.opencontainers.image.source="https://github.com/canmingwei27-star/Amazon-work-web"
 ENV NODE_ENV=production PORT=3000

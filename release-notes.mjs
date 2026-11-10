@@ -1,6 +1,7 @@
-export const APP_VERSION='1.2.10';
+export const APP_VERSION='1.2.11';
 
 export const RELEASES=Object.freeze({
+ '1.2.11':'销售异常仅显示毛利润不高于负15美元商品，增加广告ACOS、CPC、点击及花费',
  '1.2.0':'新增网页系统更新、自动检查、更新前备份和失败回滚',
  '1.2.1':'长表格增加底部悬浮横向滚动条',
  '1.2.2':'工作区表格增加吸顶表头',
