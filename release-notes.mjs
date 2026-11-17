@@ -1,6 +1,7 @@
-export const APP_VERSION='1.2.12';
+export const APP_VERSION='1.3.0';
 
 export const RELEASES=Object.freeze({
+ '1.3.0':'新增全部SKU成本与经营集成分析，精简旧功能入口',
  '1.2.12':'销售异常新增退货率，亏损金额支持5美元以内、5至10美元、超过10美元分类',
  '1.2.11':'销售异常仅显示毛利润不高于负15美元商品，增加广告ACOS、CPC、点击及花费',
  '1.2.0':'新增网页系统更新、自动检查、更新前备份和失败回滚',
@@ -22,3 +23,4 @@ export function enrichUpdateStatus(status){
  for(let index=events.length-1;index>=0;index--){const event=events[index];if(!attributed&&event.phase==='updated'&&!event.version&&status.currentVersion){event.version=String(status.currentVersion);attributed=true;}if(event.version&&!event.feature)event.feature=RELEASES[event.version]??'该版本未登记特性说明';}
  return {...status,currentRelease:RELEASES[APP_VERSION],events};
 }
+

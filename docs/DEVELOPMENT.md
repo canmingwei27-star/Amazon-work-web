@@ -186,3 +186,14 @@ main 推送触发 .github/workflows/docker.yml：全量 Node 测试 → amd64 �
 v1.2.12：销售异常读取全部美元负毛利，页面下拉互斥分类为 0<亏损≤5、5<亏损≤10、亏损>10 美元（默认），卡片、表格及 CSV 同步筛选。退货率=同周期利润报表 returnNum/salesNum×100，缺失或销量为零显示 —，CSV 输出百分数。旧快照需重新拉取以补全轻微亏损和退货率。
 
 销售异常增加一日周期（所选截止当天，默认昨日），周期下拉默认最近7日；CSV按所选周期及亏损分类导出。修改截止日时，一日周期随截止日变化。
+
+
+
+## v1.3.0 集成分析
+入口 integration.mjs、public/integration.js。GET /api/integration/shops 读取授权店铺；GET /api/integration 要求 shop/start/end，最多186天，scope为赛狐0至5范围。在线商品与MSKU期间分析按店铺+MSKU唯一匹配，成本来自配对SKU的purchaseCost/headTripCost，成本币种按店主说明默认CNY，不与销售币种混算。旧导航及初始化脚本移除，旧数据和API兼容保留。查询由用户触发，不代表后台定时同步。
+
+成本换算：public/cost-conversion.js，输入汇率方向为1目标币种=N CNY。人民币成本除以N，缺失金额或无效汇率保留未知；人民币目标使用1。CSV包含原值、目标币种、汇率及换算结果。仅重算采购和头程展示，不改变历史利润。
+
+万里汇：GET /api/fx/worldfirst?target=USD，服务端WORLDFIRST_API_KEY、WORLDFIRST_API_BASE，使用Enhanced API Bearer认证和/api/open/v1/fx/rates/query。只查询，不创建报价或兑换；卖出目标币种10000、买入CNY，clientRate作为CNY/目标币种。页面显示报价时间、参考金额，CSV带来源及时间。无授权或失败不替代其他数据源。Docker需显式传入上述环境变量。官方文档：https://docs.worldfirst.com/wfdocs/api-sdk/query_rates 。
+
+成本分析默认使用手动参考汇率，不要求万里汇API授权。官网入口只供查询，不代表自动同步；截至2026-11-17未验证到免登录公开行情接口，不能声称已接入公开实时汇率。此前账户API实现保留为可选服务端能力，默认隐藏入口。

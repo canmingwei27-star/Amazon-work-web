@@ -20,7 +20,8 @@ document.addEventListener('DOMContentLoaded',async()=>{
  }
  async function command(action,extra={}){if(pending)return;pending=true;$('update-check').disabled=$('update-install').disabled=$('update-auto').disabled=true;try{await request({method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action,...extra})});$('update-message').textContent='请求已提交，等待更新助手处理…';setTimeout(refresh,2500);}catch(e){$('update-message').textContent=e.message;pending=false;$('update-check').disabled=$('update-install').disabled=$('update-auto').disabled=false;}}
  try{const r=await apiFetch('/api/auth/status'),s=await r.json();tab.hidden=s.user?.role!=='admin';}catch{return;}
- document.querySelector('nav').addEventListener('click',e=>{const button=e.target.closest('button');if(!button)return;active=button===tab;panel.hidden=!active;if(active){for(const id of ['overview','ads-panel','wb-panel','settings-panel','accounts-panel','sales-panel'])$(id).hidden=true;document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('active',b===tab));refresh();}});
+ document.querySelector('nav').addEventListener('click',e=>{const button=e.target.closest('button');if(!button)return;active=button===tab;panel.hidden=!active;if(active){for(const id of ['integration-panel','overview','ads-panel','wb-panel','settings-panel','accounts-panel','sales-panel'])$(id).hidden=true;document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('active',b===tab));refresh();}});
  $('update-check').onclick=()=>command('check');$('update-install').onclick=()=>{if(confirm('安装最新已发布镜像？下载期间可继续使用，切换时会短暂停机。失败将恢复旧版容器。'))command('install');};$('update-auto').onchange=e=>command('configure',{autoEnabled:e.target.checked});
  setInterval(()=>{if(active&&!document.hidden)refresh();},5000);
 });
+

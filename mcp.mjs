@@ -55,13 +55,14 @@ export function normalize(result){
   if(!Array.isArray(rows))throw new Error('接口未返回有效数据行，不能视为零数据');
   return {rows,total:data.total_count??data.totalSize??null,pages:data.total_pages??data.totalPage??null,coverage:result.coverage,warnings:result.warnings??[],validation:result.output_validation??null};
 }
-export async function readPages(client,id,params){
+export async function readPages(client,id,params,{pageSize=20,maxPages=30}={}){
   const contract=await client.contract(id);let rows=[],warnings=[],validation=[],complete=false,total=null;
-  for(let page=1;page<=30;page++){
-    const r=normalize(await client.execute(id,{...params,page_no:page,page_size:20},contract));rows.push(...r.rows);warnings.push(...r.warnings);if(r.validation)validation.push(r.validation);total=r.total;
+  for(let page=1;page<=maxPages;page++){
+    const r=normalize(await client.execute(id,{...params,page_no:page,page_size:pageSize},contract));rows.push(...r.rows);warnings.push(...r.warnings);if(r.validation)validation.push(r.validation);total=r.total;
     if(r.coverage?.truncated)warnings.push('上游返回截断数据');
     if((total!==null&&rows.length>=Number(total))||(r.pages!==null&&page>=Number(r.pages))){complete=!r.coverage?.truncated;break;}
     if(!r.rows.length)break;
   }
   return {rows,total,complete,warnings:[...new Set(warnings)],validation};
 }
+

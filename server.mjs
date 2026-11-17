@@ -1,3 +1,5 @@
+import {queryWorldFirst} from './worldfirst.mjs';
+import {readIntegration} from './integration.mjs';
 import {UpdateBridge} from './update-bridge.mjs';
 import {APP_VERSION,enrichUpdateStatus} from './release-notes.mjs';
 const updates=new UpdateBridge(process.env.UPDATE_STATE_DIR||'/updates');
@@ -117,6 +119,20 @@ async function handle(req,res){
   running=true;const client=new Mcp(process.env.SELLFOX_MCP_URL||'https://api-mcp.sellfox.com/mcp',await settings.key());
   try{await client.connect();const shops=await readPages(client,'get_shop_page_list',{});if(!shops.rows.some(s=>String(s.id)===shop))return send(res,400,{error:'店铺不在当前授权列表内'});return send(res,200,await readAds(client,shop,date));}catch(e){return send(res,502,{error:e.message});}finally{await client.close();running=false;}
  }
+
+ if(url.pathname==='/api/fx/worldfirst'){
+  if(req.method!=='GET')return send(res,405,{error:'仅支持读取'});
+  try{return send(res,200,await queryWorldFirst(url.searchParams.get('target')));}catch(e){return send(res,502,{error:e.message});}
+ }
+ if(url.pathname==='/api/integration'||url.pathname==='/api/integration/shops'){
+  if(req.method!=='GET')return send(res,405,{error:'仅支持读取'});
+  const key=await settings.key();if(!key)return send(res,503,{error:'请先配置赛狐密钥'});
+  if(running)return send(res,429,{error:'已有查询正在执行'});
+  const shop=url.searchParams.get('shop'),start=url.searchParams.get('start'),end=url.searchParams.get('end'),scope=Number(url.searchParams.get('scope')??5);
+  if(url.pathname==='/api/integration'&&(!/^\d+$/.test(shop??'')||!validDate(start)||!validDate(end)||start>end||(Date.parse(end)-Date.parse(start))/86400000>185||![0,1,2,3,4,5].includes(scope)))return send(res,400,{error:'请选择店铺和最多186天日期范围'});
+  running=true;const client=new Mcp(process.env.SELLFOX_MCP_URL||'https://api-mcp.sellfox.com/mcp',key);
+  try{await client.connect();const shops=await readPages(client,'get_shop_page_list',{});if(!shops.complete)throw new Error('店铺列表未完整读取');if(url.pathname.endsWith('/shops'))return send(res,200,shops);if(!shops.rows.some(s=>String(s.id)===shop))return send(res,400,{error:'店铺不在授权列表'});return send(res,200,await readIntegration(client,{shop,start,end,scope}));}catch(e){return send(res,502,{error:e.message});}finally{await client.close();running=false;}
+ }
  if(url.pathname==='/api/dashboard'){
   if(!await settings.key())return send(res,503,{error:'请到左侧接口设置填写并保存赛狐密钥。'});
   const start=url.searchParams.get('start'),end=url.searchParams.get('end');
@@ -131,9 +147,10 @@ async function handle(req,res){
    return send(res,200,output);
   }catch(e){return send(res,502,{error:e.message});}finally{await client.close();running=false;}
  }
- const files={'/motion.js':'motion.js','/table-scroll.js':'table-scroll.js','/updates.js':'updates.js','/date-range.js':'date-range.js','/':'index.html','/app.js':'app.js','/api.js':'api.js','/style.css':'style.css','/ads.js':'ads.js','/workbench.js':'workbench.js','/settings.js':'settings.js','/advanced.js':'advanced.js','/workflows.js':'workflows.js','/accounts.js':'accounts.js','/sales.js':'sales.js','/official-ads.js':'official-ads.js'};
+ const files={'/cost-conversion.js':'cost-conversion.js','/integration.js':'integration.js','/motion.js':'motion.js','/table-scroll.js':'table-scroll.js','/updates.js':'updates.js','/date-range.js':'date-range.js','/':'index.html','/app.js':'app.js','/api.js':'api.js','/style.css':'style.css','/ads.js':'ads.js','/workbench.js':'workbench.js','/settings.js':'settings.js','/advanced.js':'advanced.js','/workflows.js':'workflows.js','/accounts.js':'accounts.js','/sales.js':'sales.js','/official-ads.js':'official-ads.js'};
  if(!files[url.pathname])return send(res,404,{error:'Not found'});
  try{const file=files[url.pathname];res.writeHead(200,{'Content-Type':file.endsWith('.js')?'text/javascript; charset=utf-8':file.endsWith('.css')?'text/css; charset=utf-8':'text/html; charset=utf-8','Cache-Control':'no-cache'});res.end(await readFile(new URL('./public/'+file,import.meta.url)));}catch{send(res,500,{error:'页面加载失败'});}
 }
 const server=http.createServer((req,res)=>{handle(req,res).catch(()=>{if(!res.headersSent)send(res,500,{error:'服务器处理失败，请检查配置与磁盘权限'});else res.end();});});
 authReady.then(()=>server.listen(port,'0.0.0.0',()=>console.log(`Sellfox dashboard listening on ${server.address().port}`))).catch(()=>{console.error('账号数据初始化失败，请检查数据卷权限');process.exitCode=1;});
+
