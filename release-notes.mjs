@@ -1,6 +1,7 @@
-export const APP_VERSION='1.3.2';
+export const APP_VERSION='1.3.3';
 
 export const RELEASES=Object.freeze({
+ '1.3.3':'表头边界直接拖动列宽，自动保存并修复过大列间距',
  '1.3.2':'自定义显示列、拖动调序、固定列及保存配置',
  '1.3.1':'集成分析支持手动汇率、商品图片及自定义排序',
  '1.3.0':'新增全部SKU成本与经营集成分析，精简旧功能入口',
