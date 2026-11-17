@@ -58,3 +58,6 @@ main .tablewrap{scrollbar-width:none}main .tablewrap::-webkit-scrollbar{height:0
  .calendar{min-width:700px}.product-thumb{width:54px;height:54px}
 }
 @media(max-width:380px){main{padding-left:8px;padding-right:8px}nav button{padding:8px 10px}.card,section{padding:13px}h1{font-size:22px}}
+
+
+.column-dialog{width:min(1050px,94vw);max-height:85vh;border:1px solid #d7dfec;border-radius:12px;padding:20px}.column-dialog::backdrop{background:#15243c66}.column-layout{display:grid;grid-template-columns:1.5fr 1fr;gap:24px}.column-layout section{max-height:60vh;overflow:auto}.column-layout [data-fields]{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:16px}.column-layout label{display:flex;flex-direction:row;gap:8px;align-items:center}.column-layout input[type=checkbox]{width:auto}.column-selected{display:flex;gap:4px;align-items:center;padding:8px;border-bottom:1px solid #e1e7f0}.column-selected span{flex:1}.column-selected button{padding:4px 6px}.column-dialog footer{display:flex;gap:10px;padding-top:16px}@media(max-width:700px){.column-layout{grid-template-columns:1fr}.column-layout section{max-height:30vh}}
