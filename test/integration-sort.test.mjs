@@ -1,0 +1,2 @@
+import {test} from 'node:test';import assert from 'node:assert/strict';import '../public/integration-sort.js';
+test('数值排序、空值置后、稳定顺序及不修改原数据',()=>{const rows=[{v:2,id:1},{v:null},{v:10},{v:2,id:2},{v:0}];assert.deepEqual(IntegrationSort.sort(rows,'v','asc').map(r=>r.v),[0,2,2,10,null]);assert.deepEqual(IntegrationSort.sort(rows,'v','desc').map(r=>r.v),[10,2,2,0,null]);assert.equal(rows[0].v,2);assert.deepEqual(IntegrationSort.sort(rows,'v','asc').filter(r=>r.v===2).map(r=>r.id),[1,2]);assert.deepEqual(IntegrationSort.sort(rows,'','desc'),rows);});
